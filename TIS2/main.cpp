@@ -71,7 +71,7 @@ int main() {
 
     printf("Cas izvajanja: %lf sekund\n", time_spent);
 
-    sceCtrlSetSamplingCycle(0);
+    /*sceCtrlSetSamplingCycle(0);
     sceCtrlSetSamplingMode(PSP_CTRL_MODE_DIGITAL);
 
     SceCtrlData input{};
@@ -116,7 +116,7 @@ int main() {
     printf("%d\n", static_cast<int>(sizeof(*base)));
     printf("%d\n", oskParams->base.size);
 
-    sceUtilityOskInitStart(oskParams);
+    sceUtilityOskInitStart(oskParams);*/
 
     /*pspDebugScreenSetTextColor(0xffffffff);
     pspDebugScreenSetBackColor(0x00000000);
