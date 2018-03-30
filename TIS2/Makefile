@@ -1,9 +1,9 @@
 TARGET = TIS2
 OBJS = main.o
-LIBS = -lstdc++ -lpspdebugkb
+LIBS = -lstdc++
 
 INCDIR =
-CFLAGS = -G0 -Wall -O2 -std=c++14
+CFLAGS = -G0 -Wall -O2 -std=c++11
 CXXFLAGS = $(CFLAGS) -fno-rtti -fexceptions
 ASFLAGS = $(CFLAGS)
 

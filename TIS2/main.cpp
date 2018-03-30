@@ -5,6 +5,7 @@
 #include <pspdebugkb.h>
 #include <pspctrl.h>
 #include <psputility.h>
+#include <pspdisplay.h>
 #include "pspcallbacks.hpp"
 
 #define printf pspDebugScreenPrintf
@@ -33,63 +34,33 @@ string uint64_t_toString(uint64_t argument);
 string uint32_t_toString(uint32_t argument);
 
 string long_double_ToString(long double argument);
+
+void izracunaj(uint32_t dolzinaNiza);
+
+bool IsValidAddress(u32 address);
 //
 
 int main() {
     pspDebugScreenInit();
     SetupCallbacks();
 
-    printf("Start\n");
+    uint32_t dolzinaNiza = 20;
 
-    clock_t begin = clock();
+    izracunaj(dolzinaNiza);
 
-    int dolzinaNiza = 20;
-    uint64_t tab[] = {0, 0, 0, 0, 0};
-    uint64_t v_stNIzov = 0, *stNizov = &v_stNIzov;
-
-    auto stEnic = static_cast<uint32_t>(dolzinaNiza / 5);
-
-    generiraj("", 0, dolzinaNiza, stEnic, stNizov, tab);
-    printf("%s nizov\n", uint64_t_toString(*stNizov).c_str());
-    printf("1: %s\n01: %s\n001: %s\n0001: %s\n0000: %s\nskupaj %s posameznih kod\n",
-           uint64_t_toString(tab[0]).c_str(),
-           uint64_t_toString(tab[1]).c_str(),
-           uint64_t_toString(tab[2]).c_str(),
-           uint64_t_toString(tab[3]).c_str(),
-           uint64_t_toString(tab[4]).c_str(),
-           uint64_t_toString(tab[0] + tab[1] + tab[2] + tab[3] + tab[4]).c_str());
-
-    /*printf("%f\n", static_cast<float>(tab[0] + 2 * tab[1] + 3 * tab[2] + 4 * tab[3] + 4 * tab[4]));
-    auto deljitelj = static_cast<long>(tab[0] + tab[1] + tab[2] + tab[3] + tab[4]);
-    printf("%ld\n", deljitelj);*/
-    double povprecnaDolzina = static_cast<double>(tab[0] + 2 * tab[1] + 3 * tab[2] + 4 * tab[3] + 4 * tab[4]) /
-                              static_cast<double>(tab[0] + tab[1] + tab[2] + tab[3] + tab[4]);
-    printf("povprecna dolzina: %lf\n", povprecnaDolzina);
-
-    clock_t end = clock();
-    double time_spent = (double) (end - begin) / CLOCKS_PER_SEC;
-
-    printf("Cas izvajanja: %lf sekund\n", time_spent);
-
-    /*sceCtrlSetSamplingCycle(0);
-    sceCtrlSetSamplingMode(PSP_CTRL_MODE_DIGITAL);
-
-    SceCtrlData input{};
-
-    string izpis;
-    auto *izpisPtr = reinterpret_cast<unsigned short *>(&izpis);
-    SceUtilityOskData *oskData{};
+    auto *izpis = new string;
+    auto *oskData = new SceUtilityOskData;
     oskData->unk_00 = 0;
     oskData->unk_04 = 0;
     oskData->unk_12 = 0;
     oskData->unk_24 = 0;
-    oskData->language = PSP_UTILITY_OSK_LANGUAGE_DEFAULT;
-    oskData->inputtype = PSP_UTILITY_OSK_INPUTTYPE_ALL;
+    oskData->language = PSP_UTILITY_OSK_LANGUAGE_ENGLISH;
+    oskData->inputtype = PSP_UTILITY_OSK_INPUTTYPE_LATIN_LOWERCASE;
     oskData->lines = 1;
     oskData->desc = (unsigned short *) "Testna tipkovnica";
-    oskData->intext = (unsigned short *) "";
-    oskData->outtext = izpisPtr;
-    oskData->result = PSP_UTILITY_OSK_RESULT_CHANGED;
+    oskData->intext = (unsigned short *) "test";
+    oskData->outtext = reinterpret_cast<unsigned short *>(izpis);
+    oskData->result = PSP_UTILITY_OSK_RESULT_UNCHANGED;
     oskData->outtextlimit = 30;
 
     auto *base = new pspUtilityDialogCommon;
@@ -100,10 +71,10 @@ int main() {
     base->fontThread = 0;
     base->graphicsThread = 0;
     base->soundThread = 0;
-    base->reserved[0]=0;
-    base->reserved[1]=0;
-    base->reserved[2]=0;
-    base->reserved[3]=0;
+    base->reserved[0] = 0;
+    base->reserved[1] = 0;
+    base->reserved[2] = 0;
+    base->reserved[3] = 0;
     base->size = sizeof(SceUtilityOskParams);
 
     auto *oskParams = new SceUtilityOskParams;
@@ -111,38 +82,113 @@ int main() {
     oskParams->unk_60 = 0;
     oskParams->base = *base;
     oskParams->data = oskData;
+    oskParams->state = PSP_UTILITY_OSK_DIALOG_VISIBLE;
 
-    printf("%d\n", static_cast<int>(sizeof(SceUtilityOskParams)));
-    printf("%d\n", static_cast<int>(sizeof(*base)));
-    printf("%d\n", oskParams->base.size);
+    printf("\npspUtilityDialogCommon %d\n", static_cast<int>(sizeof(pspUtilityDialogCommon)));
+    printf("base %d\n", static_cast<int>(sizeof(*base)));
+    printf("base.size %d\n\n", oskParams->base.size);
 
-    sceUtilityOskInitStart(oskParams);*/
+    printf("SceUtilityOskParams %d %d\n", static_cast<int>(sizeof(SceUtilityOskParams)),
+           static_cast<int>(sizeof(oskParams)));
+    printf("SceUtilityOskParams->datacount %d\n", static_cast<int>(sizeof(oskParams->datacount)));
+    printf("SceUtilityOskParams->unk_60 %d\n", static_cast<int>(sizeof(oskParams->unk_60)));
+    printf("SceUtilityOskParams->data %d\n", static_cast<int>(sizeof(oskParams->data)));
+    printf("SceUtilityOskParams->state %d\n", static_cast<int>(sizeof(oskParams->state)));
 
-    /*pspDebugScreenSetTextColor(0xffffffff);
-    pspDebugScreenSetBackColor(0x00000000);
-    printf("\nstri = \"%s\"\n", izpis.c_str());
+    if (IsValidAddress(reinterpret_cast<const u32>(oskParams->data))) {
+        printf("true\n");
+    } else {
+        printf("false\n");
+    }
 
-    printf("%s\n", izpis.c_str());*/
+    sceUtilityOskInitStart(oskParams);
 
-    /*char str[PSP_DEBUG_KB_MAXLEN];
-    wmemset(reinterpret_cast<wchar_t *>(str), '0', PSP_DEBUG_KB_MAXLEN);
+    printf("Keyboard state: %d\n", sceUtilityOskGetStatus());;
 
+    /*while (sceUtilityOskGetStatus() != PSP_UTILITY_OSK_DIALOG_INITED) {
+        sceKernelDelayThread(100000);
+    }
+    printf("inited\n");*/
+    sceUtilityOskUpdate(1);
+    printf("Keyboard state: %d\n", sceUtilityOskGetStatus());
+
+    printf("fps: %f\n", sceDisplayGetFramePerSec());
+
+    int mode, width, height;
+    sceDisplayGetMode(&mode, &width, &height);
+
+    printf("mode: %d\nwidth: %d\nheight: %d\n", mode, width, height);
+
+    sceCtrlSetSamplingCycle(0);
+    sceCtrlSetSamplingMode(PSP_CTRL_MODE_DIGITAL);
+
+    SceCtrlData input{};
+
+    int i = 1;
     while (true) {
         sceCtrlReadBufferPositive(&input, 1);
-
         if (input.Buttons & PSP_CTRL_CROSS) {
-            pspDebugKbInit(str);
-
-            pspDebugScreenSetTextColor(0xffffffff);
-            pspDebugScreenSetBackColor(0x00000000);
-            printf("\nstri = \"%s\"\n", str);
-            break;
-            //printf("str is %d characters long", str);
+            pspDebugScreenClear();
+            i++;
+            printf("St. izvedbe: %d\n", i);
+            izracunaj(dolzinaNiza);
+            continue;
         }
-    }*/
+        if (input.Buttons & PSP_CTRL_CIRCLE) {
+            break;
+        }
+    }
 
-
+    printf("\nKONEC");
     sceKernelSleepThread();
+}
+
+void izracunaj(uint32_t dolzinaNiza) {
+    printf("dolzina niza: %d\n", dolzinaNiza);
+
+    clock_t begin = clock();
+    uint64_t tab[] = {0, 0, 0, 0, 0};
+    uint64_t v_stNIzov = 0, *stNizov = &v_stNIzov;
+
+    auto stEnic = static_cast<uint32_t>(dolzinaNiza / 5);
+
+    generiraj("", 0, dolzinaNiza, stEnic, stNizov, tab);
+
+    clock_t end = clock();
+    double time_spent = (double) (end - begin) / CLOCKS_PER_SEC;
+
+    printf("%s nizov\n", uint64_t_toString(*stNizov).c_str());
+    printf("1: %s\n01: %s\n001: %s\n0001: %s\n0000: %s\nskupaj %s posameznih kod\n",
+           uint64_t_toString(tab[0]).c_str(),
+           uint64_t_toString(tab[1]).c_str(),
+           uint64_t_toString(tab[2]).c_str(),
+           uint64_t_toString(tab[3]).c_str(),
+           uint64_t_toString(tab[4]).c_str(),
+           uint64_t_toString(tab[0] + tab[1] + tab[2] + tab[3] + tab[4]).c_str());
+
+    double povprecnaDolzina = static_cast<double>(tab[0] + 2 * tab[1] + 3 * tab[2] + 4 * tab[3] + 4 * tab[4]) /
+                              static_cast<double>(tab[0] + tab[1] + tab[2] + tab[3] + tab[4]);
+    printf("povprecna dolzina: ");
+    pspDebugScreenSetTextColor(0x00ffff);
+    printf("%lf\n", povprecnaDolzina);
+    pspDebugScreenSetTextColor(0xffffff);
+
+    printf("Cas izvajanja: ");
+    pspDebugScreenSetTextColor(0x00ff00);
+    printf("%lf", time_spent);
+    pspDebugScreenSetTextColor(0xffffff);
+    printf(" sekund\n");
+}
+
+bool IsValidAddress(const u32 address) {
+    printf("0x%08X\n", address);
+    if ((address & 0x3E000000) == 0x08000000) {
+        return true;
+    } else if ((address & 0x3F800000) == 0x04000000) {
+        return true;
+    } else if ((address & 0xBFFF0000) == 0x00010000) {
+        return (address & 0x0000FFFF) < 0x00004000;
+    } else return (address & 0x3F000000) >= 0x08000000 && (address & 0x3F000000) < 0x08000000 + 0x02000000;
 }
 
 string uint64_t_tabToString(uint64_t tab[], int size) {
