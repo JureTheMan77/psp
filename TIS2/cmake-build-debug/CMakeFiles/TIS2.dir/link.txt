@@ -1,1 +1,1 @@
-/usr/bin/c++   -lstdc++ -lpspdebugkb -fno-rtti -fexceptions -Wall -O2 -std=c++1y -g   CMakeFiles/TIS2.dir/main.cpp.o  -o TIS2 
+/usr/bin/c++   -lstdc++ -lpspdebugkb -fno-rtti -fexceptions -Wall -O2 -std=c++11 -g   CMakeFiles/TIS2.dir/main.cpp.o  -o TIS2 

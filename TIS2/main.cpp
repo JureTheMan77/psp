@@ -2,7 +2,6 @@
 #include <string>
 #include <sstream>
 #include <ctime>
-#include <pspdebugkb.h>
 #include <pspctrl.h>
 #include <psputility.h>
 #include <pspdisplay.h>
