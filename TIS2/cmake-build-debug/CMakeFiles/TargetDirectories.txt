@@ -1,3 +1,0 @@
-/home/jure/Dokumenti/psp/TIS2/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/jure/Dokumenti/psp/TIS2/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/jure/Dokumenti/psp/TIS2/cmake-build-debug/CMakeFiles/TIS2.dir
