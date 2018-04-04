@@ -1,9 +1,9 @@
 TARGET = Graphics
 OBJS = $(wildcard *.cpp) $(wildcard *.c)
-LIBS = -lstdc++ -lpspgu
+LIBS = -lstdc++ -lpspgum -lpspgu -lm
 
 INCDIR =
-CFLAGS = -G0 -Wall -O2 -std=c++11
+CFLAGS = -G0 -Wall -O2 -std=c++0x
 CXXFLAGS = $(CFLAGS) -fno-rtti -fexceptions
 ASFLAGS = $(CFLAGS)
 

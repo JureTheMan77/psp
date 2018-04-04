@@ -1,5 +1,6 @@
 #include "GraphicsObject.hpp"
 #include <pspgu.h>
+#include <pspgum.h>
 
 static unsigned int __attribute__((aligned(16))) list[262144];
 
@@ -25,6 +26,7 @@ bool GraphicsObject::Init3DGraphics() {
 
     // Initialize the GraphicalSystem
     sceGuInit();
+    gumInit();
     sceGuStart(GU_DIRECT, list);
     sceGuDrawBuffer(GU_PSM_8888, nullptr, 512);
     sceGuDispBuffer(480, 272, (void *) 0x88000, 512);
@@ -42,9 +44,10 @@ bool GraphicsObject::Init3DGraphics() {
     sceGuFrontFace(GU_CW);
     sceGuShadeModel(GU_SMOOTH);
     sceGuEnable(GU_CULL_FACE);
-    sceGuEnable(GU_TEXTURE_2D);
+    //sceGuEnable(GU_TEXTURE_2D);
     sceGuEnable(GU_CLIP_PLANES);
     sceGuEnable(GU_LIGHTING);
+    //sceGuEnable(GU_LIGHT0);
     sceGuEnable(GU_BLEND);
     sceGuBlendFunc(GU_ADD, GU_SRC_ALPHA, GU_ONE_MINUS_SRC_ALPHA, 0, 0);
     sceGuFinish();

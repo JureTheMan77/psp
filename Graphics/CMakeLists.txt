@@ -6,5 +6,5 @@ set(CMAKE_CXX_STANDARD 11)
 add_executable(Graphics main.cpp
         GraphicsObject.hpp
         GraphicsObject.cpp
-        pspcallbacks.hpp GameApp.hpp GameApp.cpp Buttons.hpp)
+        pspcallbacks.hpp GameApp.hpp GameApp.cpp Buttons.hpp Triangle.cpp Triangle.hpp Color.hpp)
 include_directories("/usr/local/pspdev/psp/sdk/include")
