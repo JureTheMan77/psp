@@ -38,5 +38,5 @@ void Triangle::Render() {
     sceGumRotateY(rot);
 
     sceGumDrawArray(GU_TRIANGLES, GU_COLOR_8888 | GU_VERTEX_32BITF | GU_TRANSFORM_3D,
-                    3, nullptr, triangle);
+                    3, 0, triangle);
 }

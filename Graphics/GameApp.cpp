@@ -157,6 +157,8 @@ void GameApp::Render() {
     //set the view
     sceGumLoadIdentity();
 
+    ScePspFQuaternion
+
     //render the model
     triangle->Render();
 
