@@ -2,13 +2,17 @@
 
 # build the program
 printf "Building application...\n"
-make
+makeResult=$(pspdev-docker make)
+
+if [ "$makeResult" -gt 0 ]; then
+  printf "Make returned code %d, aborting." makeResult
+fi
 
 # delete redundant files
-printf "Removing *.o files: %s\n" "$(find . -maxdepth 1 -type f -name "*.o")"
+printf "Removing *.o files: %s\n" "$(find . -type f -name "*.o")"
 find . -type f -name '*.o' -delete
 
-printf "Removing *.elf files: %s\n" "$(find . -maxdepth 1 -type f -name "*.elf")"
+printf "Removing *.elf files: %s\n" "$(find . -type f -name "*.elf")"
 find . -type f -name '*.elf' -delete
 
 # create the build directory if it doesn't exist
@@ -20,6 +24,6 @@ fi
 
 # move the executables to the build directory
 printf "Moving %s and %s files to build/ directory...\n" "$(find . -maxdepth 1 -type f -name "*.PBP")" "$(find . -maxdepth 1 -type f -name "*.SFO")"
-mv ./*.PBP build/
-mv ./*.SFO build/
+mv -f ./*.PBP build/
+mv -f ./*.SFO build/
 printf "Done!\n"

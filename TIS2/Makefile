@@ -4,7 +4,7 @@ LIBS = -lstdc++
 
 ROOTDIR = $(realpath .)
 INCDIR =
-CFLAGS = -G0 -Wall -O2 -std=c++11
+CFLAGS = -G0 -Wall -O2 -std=c++17
 CXXFLAGS = $(CFLAGS) -fno-rtti -fexceptions
 ASFLAGS = $(CFLAGS)
 
